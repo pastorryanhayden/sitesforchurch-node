@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var json = bodyParser.json();
-
+var port = Number(process.env.PORT || 3000);
 app.get('/', function (req, res) {
     var basic = 'Server running';
     res.send(basic);
@@ -47,4 +47,4 @@ app.post('/air', json, function (req, res) {
     res.send(req.body['theme']);
 });
 
-app.listen(1993);
+app.listen(port);

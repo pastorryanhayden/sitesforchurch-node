@@ -44,7 +44,7 @@ app.post('/air', json, function (req, res) {
         console.log(record);
     });
     console.log('body: ' + JSON.stringify(req.body));
-    res.send(req.body['theme']);
+    res.send(req.body);
 });
 
 app.listen(port);

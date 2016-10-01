@@ -10,7 +10,8 @@ app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 var port = Number(process.env.PORT || 3000);
 
 var mode = 'test'; //Change this to 'live' to easily switch to live keys for payment
-var stripe_secret_key = (mode == 'live' ? "" : "sk_test_qrdBNKvz4CzyEMgfXEDFWJ5U");
+var stripe_secret_key = (mode == 'live' ? "sk_live_ddIYPWN3DkuOt1jH9MRje53Z" : "sk_test_qrdBNKvz4CzyEMgfXEDFWJ5U");
+var base_url = (mode == 'live' ? 'http://sitesfor.church/' : 'http://localhost:3000/');
 var stripe = require("stripe")(stripe_secret_key);
 
 app.get('/', function (req, res) {
@@ -31,9 +32,9 @@ app.post('/pay_monthly', function (req, res) {
         description: "Sitefor.Church Monthly Charge"
     }, function (err, charge) {
         if (err && err.type === 'StripeCardError') {
-            res.redirect('http://sitesfor.church/failed.html');
+            res.redirect(base_url + 'failed.html');
         }
-        res.redirect('http://sitesfor.church/thankyou.html');
+        res.redirect(base_url + 'thankyou.html');
     });
 });
 
@@ -49,9 +50,9 @@ app.post('/pay_annually', function (req, res) {
         description: "Sitefor.Church Annual Charge"
     }, function (err, charge) {
         if (err && err.type === 'StripeCardError') {
-            res.redirect('http://sitesfor.church/failed.html');
+            res.redirect(base_url + 'failed.html');
         }
-        res.redirect('http://sitesfor.church/thankyou.html');
+        res.redirect(base_url + 'thankyou.html');
     });
 });
 

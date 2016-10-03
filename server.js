@@ -3,16 +3,32 @@
  */
 var express = require('express');
 var bodyParser = require('body-parser');
+var cors = require('cors')
 var app = express();
-
+app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 var port = Number(process.env.PORT || 3000);
 
-var mode = 'test'; //Change this to 'live' to easily switch to live keys for payment
+var mode = 'live'; //Change this to 'live' to easily switch to live keys for payment
 var stripe_secret_key = (mode == 'live' ? "sk_live_ddIYPWN3DkuOt1jH9MRje53Z" : "sk_test_qrdBNKvz4CzyEMgfXEDFWJ5U");
-var base_url = (mode == 'live' ? 'http://sitesfor.church/' : 'http://localhost:3000/');
+var base_url = (mode == 'live' ? 'http://sitesfor.church/' : 'http://localhost:'+port+'/');
 var stripe = require("stripe")(stripe_secret_key);
+
+// Add headers
+app.use(function (req, res, next) {
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    // Pass to next layer of middleware
+    next();
+});
 
 app.get('/', function (req, res) {
     var basic = 'I\'m Ok';
@@ -63,11 +79,6 @@ app.post('/air', function (req, res) {
     base('Client entries').create({
         "church_name": req.body['churchName'],
         "Notes": 'Created through Registration page + API',
-        "Logo": [
-            {
-                "url": "https://dl.airtable.com/p5LgFEUWSHqBYWS46WKa_logo.png"
-            }
-        ],
         "church_location": req.body['churchCity'],
         "theme": req.body['theme'],
         "Domain": req.body['churchDomain'],

@@ -3,12 +3,12 @@
  */
 var express = require('express');
 var bodyParser = require('body-parser');
-var cors = require('cors')
+var cors = require('cors');
 var app = express();
 app.use(cors());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
-var port = Number(process.env.PORT || 3000);
+var port = Number(process.env.PORT || 1993);
 
 var mode = 'live'; //Change this to 'live' to easily switch to live keys for payment
 var stripe_secret_key = (mode == 'live' ? "sk_live_ddIYPWN3DkuOt1jH9MRje53Z" : "sk_test_qrdBNKvz4CzyEMgfXEDFWJ5U");

@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 var port = Number(process.env.PORT || 1993);
 
 var mode = 'live'; //Change this to 'live' to easily switch to live keys for payment
-var stripe_secret_key = (mode == 'live' ? "sk_live_ddIYPWN3DkuOt1jH9MRje53Z" : "sk_test_qrdBNKvz4CzyEMgfXEDFWJ5U");
+var stripe_secret_key = (mode == 'live' ? "sk_live_ddIYPWN3DkuOt1jH9MRje53Z" : "sk_test_893rqLhSB85nEqetlIpnQRT3");
 var base_url = (mode == 'live' ? 'http://sitesfor.church/' : 'http://localhost:'+port+'/');
 var stripe = require("stripe")(stripe_secret_key);
 
@@ -50,6 +50,8 @@ app.post('/pay_monthly', function (req, res) {
         if (err && err.type === 'StripeCardError') {
             res.redirect(base_url + 'failed.html');
         }
+        // res.send(charge);
+        // console.log(charge);
         res.redirect(base_url + 'thankyou.html');
     });
 });

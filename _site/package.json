@@ -1,0 +1,24 @@
+{
+  "name": "siteforchurch-backend",
+  "version": "1.0.0",
+  "description": "Back-end for signup module",
+  "main": "server.js",
+  "dependencies": {
+    "airtable": "^0.4.2",
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "stripe": "^4.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "John Muteti",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pastorryanhayden/sitesforchurch-node.git"
+  }
+}

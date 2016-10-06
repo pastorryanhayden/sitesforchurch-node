@@ -45,6 +45,7 @@ app.post('/pay_monthly', function (req, res) {
         amount: 3000, // Amount in cents
         currency: "usd",
         source: token,
+        //plan: "sfcMonthly",
         description: "Sitefor.Church Monthly Charge"
     }, function (err, charge) {
         if (err && err.type === 'StripeCardError') {
@@ -65,6 +66,7 @@ app.post('/pay_annually', function (req, res) {
         amount: 36000, // Amount in cents
         currency: "usd",
         source: token,
+        //plan: "sfcAnnual",
         description: "Sitefor.Church Annual Charge"
     }, function (err, charge) {
         if (err && err.type === 'StripeCardError') {

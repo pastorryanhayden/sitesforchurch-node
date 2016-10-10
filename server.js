@@ -11,9 +11,15 @@ app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 var port = Number(process.env.PORT || 1993);
 
 var mode = 'live'; //Change this to 'live' to easily switch to live keys for payment
-var stripe_secret_key = (mode == 'live' ? "sk_live_ddIYPWN3DkuOt1jH9MRje53Z" : "sk_test_893rqLhSB85nEqetlIpnQRT3");
+var stripe_secret_key = (mode == 'live' ? "sk_live_ddIYPWN3DkuOt1jH9MRje53Z" : "sk_test_qrdBNKvz4CzyEMgfXEDFWJ5U");
 var base_url = (mode == 'live' ? 'http://sitesfor.church/' : 'http://localhost:'+port+'/');
 var stripe = require("stripe")(stripe_secret_key);
+
+app.get('/', function (req, res) {
+    var basic = 'I\'m Ok';
+    res.send(basic);
+    console.log(basic);
+});
 
 // Add headers
 app.use(function (req, res, next) {
@@ -30,49 +36,43 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/', function (req, res) {
-    var basic = 'I\'m Ok';
-    res.send(basic);
-    console.log(basic);
-});
-
 // Pay with Stripe monthly.
 app.post('/pay_monthly', function (req, res) {
     var token = req.body.stripeToken;
+    var email = req.body.email;
 
-// Create a charge: this will charge the user's card
-    var charge = stripe.charges.create({
-        amount: 3000, // Amount in cents
-        currency: "usd",
+    stripe.customers.create({
         source: token,
-        //plan: "sfcMonthly",
-        description: "Sitefor.Church Monthly Charge"
-    }, function (err, charge) {
-        if (err && err.type === 'StripeCardError') {
-            res.redirect(base_url + 'failed.html');
+        plan: "sfcMonthly",
+        email: email
+    }, function(err, customer) {
+        if(err && err.type === 'StripeCardError') {
+            console.log(err);
+            res.redirect(base_url+'failed.html');
+        } else {
+            console.log(customer);
+            res.redirect(base_url+'thankyou.html');
         }
-        // res.send(charge);
-        // console.log(charge);
-        res.redirect(base_url + 'thankyou.html');
     });
 });
 
 // Pay with Stripe annually
 app.post('/pay_annually', function (req, res) {
     var token = req.body.stripeToken;
+    var email = req.body.email;
 
-// Create a charge: this will charge the user's card
-    var charge = stripe.charges.create({
-        amount: 36000, // Amount in cents
-        currency: "usd",
+    stripe.customers.create({
         source: token,
-        //plan: "sfcAnnual",
-        description: "Sitefor.Church Annual Charge"
-    }, function (err, charge) {
-        if (err && err.type === 'StripeCardError') {
-            res.redirect(base_url + 'failed.html');
+        plan: "sfcAnnual",
+        email: email
+    }, function(err, customer) {
+        if(err && err.type === 'StripeCardError') {
+            console.log(err);
+            res.redirect(base_url+'failed.html');
+        } else {
+            console.log(customer);
+            res.redirect(base_url+'thankyou.html');
         }
-        res.redirect(base_url + 'thankyou.html');
     });
 });
 
